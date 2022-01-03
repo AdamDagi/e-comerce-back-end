@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
   // be sure to include its associated Product data
   Tag.findAll({
     include: [
-      { model: Category }
+      { model: Product }
     ]
   }).then(tagdata => {
     res.json(tagdata);
@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
   // be sure to include its associated Product data
   Tag.findOne({
     include: [
-      { model: Category }
+      { model: Product }
     ],
     where: {
       id: req.params.id
@@ -31,7 +31,18 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+  /* req.body should look like this...
+    {
+      tag_name: Kisochki Test
+    }
+  */
   // create a new tag
+  Tag.create(req.body)
+    .then((tag) => res.status(200).json(tag))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json(err);
+    });
 });
 
 router.put('/:id', (req, res) => {
